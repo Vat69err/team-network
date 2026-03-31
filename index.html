@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Stories — NR Sociality</title>
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+        h2 {
+            font-style: italic;
+            font-weight: 400;
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: clamp(16px, 2.5vw, 22px);
+            max-width: 700px;
+            line-height: 1.6;
+        }
+        #team-network {
+            width: 100%;
+            max-width: 960px;
+            height: 560px;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+            border: 1px solid #eaeaea;
+            overflow: hidden;
+        }
+        .back-link {
+            margin-top: 24px;
+            font-size: 14px;
+            color: #888;
+        }
+        .back-link a { color: #111; text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h2>"When the day ends and all is said and done, we're just stories."</h2>
+    <div id="team-network"></div>
+    <p class="back-link">← <a href="https://nrsociality.org">Back to NR Sociality</a></p>
+
+    <script>
+        var nodes = new vis.DataSet([
+            { id: 0, label: "Our\nStories", shape: "circle",
+              font: {size: 20, color: '#ffffff', bold: true},
+              color: { background: '#111111', border: '#111111', hover: {background: '#444444', border: '#444444'} },
+              shadow: { enabled: true, color: 'rgba(0,0,0,0.2)', size: 15, x: 0, y: 5 }
+            },
+            { id: 1, label: "Vatsal Tewari",       url: "https://nrsociality.org/vatsal-tewari" },
+            { id: 2, label: "Anjali Singh",         url: "https://nrsociality.org/anjali-singh" },
+            { id: 3, label: "Sakshi Sharma",        url: "https://nrsociality.org/sakshi-sharma" },
+            { id: 4, label: "Arpita Mishra",        url: "https://nrsociality.org/arpita-mishra" },
+            { id: 5, label: "Mangyanger Longkumer", url: "https://nrsociality.org/mangyanger-longkumer" },
+            { id: 6, label: "Ritika Choudhary",     url: "https://nrsociality.org/ritika-choudhary" },
+            { id: 7, label: "Chandan Maisnam",      url: "https://nrsociality.org/chandan-maisnam" },
+            { id: 8, label: "Shruti Sethia",        url: "https://nrsociality.org/shruti-sethia" }
+        ]);
+
+        var edges = new vis.DataSet([
+            { from: 1, to: 0 }, { from: 2, to: 0 }, { from: 3, to: 0 },
+            { from: 4, to: 0 }, { from: 5, to: 0 }, { from: 6, to: 0 },
+            { from: 7, to: 0 }, { from: 8, to: 0 },
+            { from: 1, to: 2 }, { from: 3, to: 4 }, { from: 5, to: 6 },
+            { from: 7, to: 8 }, { from: 8, to: 1 }, { from: 2, to: 4 }
+        ]);
+
+        var options = {
+            nodes: {
+                shape: 'box',
+                margin: { top: 13, bottom: 13, left: 18, right: 18 },
+                borderWidth: 2,
+                font: { size: 15, face: 'Inter, system-ui, sans-serif', color: '#111111', bold: true },
+                color: {
+                    background: '#ffffff', border: '#e2e8f0',
+                    hover: { background: '#f8fafc', border: '#111111' },
+                    highlight: { background: '#f8fafc', border: '#111111' }
+                },
+                shadow: { enabled: true, color: 'rgba(0,0,0,0.06)', size: 10, x: 0, y: 4 }
+            },
+            edges: {
+                width: 2,
+                color: { color: '#e2e8f0', highlight: '#111111', hover: '#111111' },
+                smooth: { type: 'continuous' }
+            },
+            physics: {
+                barnesHut: { gravitationalConstant: -3500, centralGravity: 0.3, springLength: 160 },
+                stabilization: { iterations: 200 }
+            },
+            interaction: { hover: true, zoomView: false, dragView: true }
+        };
+
+        var network = new vis.Network(document.getElementById("team-network"), { nodes, edges }, options);
+
+        network.on("click", function(params) {
+            if (params.nodes.length > 0) {
+                var node = nodes.get(params.nodes[0]);
+                if (node.url) window.location.href = node.url;
+            }
+        });
+        network.on("hoverNode", () => { network.canvas.body.container.style.cursor = 'pointer'; });
+        network.on("blurNode",  () => { network.canvas.body.container.style.cursor = 'default'; });
+    </script>
+</body>
+</html>
